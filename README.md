@@ -1,9 +1,5 @@
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 ## Installation
+Request for the necessary environment variables
 
 ```bash
 $ npm install
@@ -35,6 +31,12 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Technologies used
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+NESTJS: https://docs.nestjs.com/first-steps
+
+PASSPORT : https://www.passportjs.org/
+
+TYPEORM : https://typeorm.io/
+
+POSTGRESL : https://www.postgresql.org/
