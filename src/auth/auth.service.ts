@@ -2,8 +2,8 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { AuthValidator } from './auth.validator';
 import { Repository } from 'typeorm';
 import { User } from './entities/auth.entities';
-import { CreateUserDto } from './dto/auth.dto';
-import { generateErrorResponse, generateSuccessResponse,  hashPassword } from '../common/utils/utils';
+import { CreateUserDto, LoginDto } from './dto/auth.dto';
+import { generateErrorResponse, generateSuccessResponse,  getTokens,  hashPassword } from '../common/utils/utils';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -38,41 +38,22 @@ export class AuthService {
     }
 
 
-    // async loginUser(dto: LoginDto): Promise<ResponseWithData> {
-    //     try {
-    //         const { foundUser } = await this.authValidator.validateLoginUserDto(dto);
+    async loginUser(dto: LoginDto): Promise<any> {
+        try {
+            const { foundUser } = await this.authValidator.validateLoginUserDto(dto);
 
-    //         const tokens = await getTokens(foundUser.id, foundUser.email);
-    //         const refreshToken = await hashPassword(tokens.refreshToken);
+            const {accessToken} = await getTokens(foundUser.id, foundUser.email);
 
-    //         await this.usersRepository.updateUserById(foundUser.id, { refreshToken });
-
-    //         const user = {
-    //             id: foundUser.id,
-    //             email: foundUser.email,
-    //             firstName: foundUser.firstName,
-    //             lastName: foundUser.lastName,
-    //         };
-
-    //         const daysToExpire = moment().add(config.jwtExpiresIn, 'd');
-    //         const backendTokens = {
-    //             accessToken: tokens.accessToken,
-    //             refreshToken: tokens.refreshToken,
-    //             expiresIn: daysToExpire,
-    //         };
-
-    //         return generateSuccessResponse({
-    //             statusCode: HttpStatus.OK,
-    //             message: 'Login successfull',
-    //             data: {
-    //                 user,
-    //                 backendTokens,
-    //             },
-    //         });
-    //     } catch (error) {
-    //         logError(`An error occurred while logging in user: ${error} : ${JSON.stringify(dto)}`);
-    //         return generateErrorResponse(error);
-    //     }
-    // }
+            return generateSuccessResponse({
+                statusCode: HttpStatus.OK,
+                message: 'Login successfull',
+                data: {
+                    accessToken
+                },
+            });
+        } catch (error) {
+            return generateErrorResponse(error);
+        }
+    }
 
 }
