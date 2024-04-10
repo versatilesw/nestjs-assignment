@@ -24,7 +24,6 @@ export class AuthService {
                 email: dto.email,
                 firstname: dto.firstname,
                 lastname: dto.lastname,
-                dateCreated: new Date().toISOString(),
                 password: hashedPassword,
                 role:'user'
             });

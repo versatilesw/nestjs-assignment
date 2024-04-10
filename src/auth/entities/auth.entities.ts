@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class User {
@@ -20,13 +20,6 @@ export class User {
     @Column({ default: "user" })
     role: string;
 
-    favourateCat: string;
-
-    @Column({ default: true })
-    dateCreated: string;
-
-    @Column({ default: true, nullable: true })
-    lastUpdated: string;
 }
 
 
@@ -34,3 +27,20 @@ export enum Roles {
     ADMIN = 'admin',
     USER = 'user',
 }
+
+@Entity()
+export class FavouriteCat {
+    @PrimaryGeneratedColumn()
+    id: number;
+
+
+    @Column()
+    catId: number;
+
+    @Column()
+    userId: number;
+
+}
+
+
+

@@ -4,11 +4,13 @@ import { Cat } from './entities/cats.entities';
 import { Repository } from 'typeorm';
 import { generateErrorResponse, generateSuccessResponse, throwError } from '../common/utils/utils';
 import { CreateCatDto, UpdateCatDto } from './dto/create-cat.dto';
+import { FavouriteCat } from 'src/auth/entities/auth.entities';
 
 @Injectable()
 export class CatsService {
   constructor(
     @InjectRepository(Cat) private catRepository: Repository<Cat>,
+    @InjectRepository(FavouriteCat) private favouriteCatRepository: Repository<FavouriteCat>,
   ) { }
 
   async create(dto: CreateCatDto): Promise<any> {
@@ -106,6 +108,29 @@ export class CatsService {
       return generateSuccessResponse({
         statusCode: HttpStatus.OK,
         message: 'Cat successfully deleted',
+      });
+    } catch (error) {
+      return generateErrorResponse(error);
+    }
+  }
+
+  async addCatAsFavourite(id: number, catId: number): Promise<any> {
+    try {
+
+      const foundCat = await this.catRepository.findOne({ where: { id } })
+
+      if (!foundCat) {
+        throwError('Cat does not exist', HttpStatus.NOT_FOUND);
+      }
+
+      await this.favouriteCatRepository.save({
+        catId,
+        userId: id
+      })
+
+      return generateSuccessResponse({
+        statusCode: HttpStatus.OK,
+        message: 'Cat successfully added as favourite',
       });
     } catch (error) {
       return generateErrorResponse(error);

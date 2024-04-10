@@ -7,13 +7,13 @@ import { AuthService } from './auth.service';
 import { AuthValidator } from './auth.validator';
 import { SessionSerializer } from '../common/session.serielizer';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/auth.entities';
+import { User, FavouriteCat } from './entities/auth.entities';
 
 @Module({
     imports: [
         PassportModule.register({ session: true }),
         JwtModule.register({}),
-       TypeOrmModule.forFeature([User]),
+       TypeOrmModule.forFeature([User,FavouriteCat]),
     ],
     controllers: [AuthController],
     providers: [

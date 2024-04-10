@@ -3,7 +3,7 @@ import { RolesGuard } from '../common/guards/roles.guard';
 import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
 import { CatsService } from './cats.service';
 import { Response } from 'express';
-import { CreateCatDto, UpdateCatDto } from './dto/create-cat.dto';
+import { AddCatAsFavouriteDto, CreateCatDto, UpdateCatDto } from './dto/create-cat.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtAuthGuard } from '../common/guards/jwt.guard';
 import { Roles } from '../auth/entities/auth.entities';
@@ -57,4 +57,15 @@ export class CatsController {
 
     return res.status(status).send(responseData);
   }
+
+  @UseGuards(AuthGuard('jwt'), JwtAuthGuard, RolesGuard)
+  @Role(Roles.ADMIN, Roles.USER)
+  @Post(':id/favourite')
+  async addCatAsFavourite(@Res() res: Response, @Body() requestBody: AddCatAsFavouriteDto, @Param('id', new ParseIntPipe()) id: number,) {
+    const { status, ...responseData } = await this.catsService.addCatAsFavourite(requestBody.catId,id);
+
+    return res.status(status).send(responseData);
+  }
+
+
 }
