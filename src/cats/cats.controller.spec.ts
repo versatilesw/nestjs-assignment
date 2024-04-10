@@ -1,7 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { CatsController } from './cats.controller';
 import { CatsService } from './cats.service';
-import { Cat } from './interfaces/cat.interface';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Cat } from './entities/cats.entities';
+import { AppModule } from '../app.module';
 
 describe('CatsController', () => {
   let catsController: CatsController;
@@ -9,6 +11,7 @@ describe('CatsController', () => {
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
+      imports: [TypeOrmModule.forFeature([Cat]),AppModule],
       controllers: [CatsController],
       providers: [CatsService],
     }).compile();
@@ -21,14 +24,15 @@ describe('CatsController', () => {
     it('should return an array of cats', async () => {
       const result: Cat[] = [
         {
-          age: 2,
+          age: "2",
           breed: 'Bombay',
           name: 'Pixel',
+          id: 1,
         },
       ];
-      jest.spyOn(catsService, 'findAll').mockImplementation(() => result);
+      jest.spyOn(catsService, 'findAll').mockImplementation(async () => result);
 
-      expect(await catsController.findAll()).toBe(result);
+      expect(await catsController.findAll({} as any)).toBe(result);
     });
   });
 });

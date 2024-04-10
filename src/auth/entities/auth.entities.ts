@@ -20,6 +20,8 @@ export class User {
     @Column({ default: "user" })
     role: string;
 
+    favourateCat: string;
+
     @Column({ default: true })
     dateCreated: string;
 
