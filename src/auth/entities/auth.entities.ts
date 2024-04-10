@@ -26,3 +26,9 @@ export class User {
     @Column({ default: true, nullable: true })
     lastUpdated: string;
 }
+
+
+export enum Roles {
+    ADMIN = 'admin',
+    USER = 'user',
+}

@@ -25,7 +25,8 @@ export class AuthService {
                 firstname: dto.firstname,
                 lastname: dto.lastname,
                 dateCreated: new Date().toISOString(),
-                password: hashedPassword
+                password: hashedPassword,
+                role:'user'
             });
 
             return generateSuccessResponse({
