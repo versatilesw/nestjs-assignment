@@ -11,9 +11,7 @@ export class Cat {
     @Column()
     age: string;
 
-    @Column({ default: true})
-    dateCreated:string;
+    @Column()
+    breed: string;
 
-    @Column({ default:true, nullable: true})
-    lastUpdated: string;
 }
