@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cat } from './entities/cats.entities';
 import { Repository } from 'typeorm';
 import { generateErrorResponse, generateSuccessResponse, throwError } from '../common/utils/utils';
-import { CreateCatDto } from './dto/create-cat.dto';
+import { CreateCatDto, UpdateCatDto } from './dto/create-cat.dto';
 
 @Injectable()
 export class CatsService {
@@ -58,6 +58,34 @@ export class CatsService {
         statusCode: HttpStatus.OK,
         message: 'Request completed successfully',
         data: foundCat,
+      });
+    } catch (error) {
+      return generateErrorResponse(error);
+    }
+  }
+
+  async update(id: number,dto:UpdateCatDto): Promise<any> {
+    try {
+
+      const foundCat = await this.catRepository.findOne({ where: { id } })
+
+      if (!foundCat) {
+        throwError('Cat does not exist', HttpStatus.NOT_FOUND);
+      }
+
+      if (!dto.age && !dto.breed && !dto.name) {
+        throwError('Please provide at least one field to update', HttpStatus.BAD_REQUEST);
+      }
+
+      await this.catRepository.update(id, {
+        age: dto.age,
+        breed: dto.breed,
+        name: dto.name
+      })
+
+      return generateSuccessResponse({
+        statusCode: HttpStatus.OK,
+        message: 'Cat successfully updated',
       });
     } catch (error) {
       return generateErrorResponse(error);

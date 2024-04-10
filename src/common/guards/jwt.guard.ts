@@ -17,7 +17,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         if (err || !user) {
             throw err || new UnauthorizedException('Access Denied.');
         }
-        console.log(user)
         return user;
     }
 }
