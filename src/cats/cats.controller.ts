@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Put, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Res, UseGuards } from '@nestjs/common';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
 import { CatsService } from './cats.service';
@@ -45,6 +45,15 @@ export class CatsController {
   @Patch(':id')
   async update(@Res() res: Response, @Param('id', new ParseIntPipe()) id: number, @Body() requestBody: UpdateCatDto) {
     const { status, ...responseData } = await this.catsService.update(id, requestBody);
+
+    return res.status(status).send(responseData);
+  }
+
+  @UseGuards(AuthGuard('jwt'), JwtAuthGuard, RolesGuard)
+  @Role(Roles.ADMIN)
+  @Delete(':id')
+  async delete(@Res() res: Response, @Param('id', new ParseIntPipe()) id: number,) {
+    const { status, ...responseData } = await this.catsService.delete(id);
 
     return res.status(status).send(responseData);
   }

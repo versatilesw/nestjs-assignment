@@ -91,4 +91,24 @@ export class CatsService {
       return generateErrorResponse(error);
     }
   }
+
+  async delete(id: number): Promise<any> {
+    try {
+
+      const foundCat = await this.catRepository.findOne({ where: { id } })
+
+      if (!foundCat) {
+        throwError('Cat does not exist', HttpStatus.NOT_FOUND);
+      }
+
+      await this.catRepository.delete(id)
+
+      return generateSuccessResponse({
+        statusCode: HttpStatus.OK,
+        message: 'Cat successfully deleted',
+      });
+    } catch (error) {
+      return generateErrorResponse(error);
+    }
+  }
 }
