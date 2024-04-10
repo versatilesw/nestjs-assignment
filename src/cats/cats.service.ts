@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cat} from './entities/cats.entities';
+import { Cat } from './entities/cats.entities';
 import { Repository } from 'typeorm';
-import { generateErrorResponse, generateSuccessResponse } from '../common/utils/utils';
+import { generateErrorResponse, generateSuccessResponse, throwError } from '../common/utils/utils';
 import { CreateCatDto } from './dto/create-cat.dto';
 
 @Injectable()
@@ -11,13 +11,13 @@ export class CatsService {
     @InjectRepository(Cat) private catRepository: Repository<Cat>,
   ) { }
 
-  async create(dto:CreateCatDto): Promise<any> {
+  async create(dto: CreateCatDto): Promise<any> {
     try {
 
       const cat = await this.catRepository.save({
         age: dto.age,
         breed: dto.breed,
-        name:dto.name
+        name: dto.name
       })
 
       return generateSuccessResponse({
@@ -39,6 +39,25 @@ export class CatsService {
         statusCode: HttpStatus.OK,
         message: 'Request completed successfully',
         data: allCats,
+      });
+    } catch (error) {
+      return generateErrorResponse(error);
+    }
+  }
+
+  async findOne(id: number): Promise<any> {
+    try {
+
+      const foundCat = await this.catRepository.findOne({ where: { id } })
+
+      if (!foundCat) {
+        throwError('Cat not found', HttpStatus.NOT_FOUND);
+      }
+
+      return generateSuccessResponse({
+        statusCode: HttpStatus.OK,
+        message: 'Request completed successfully',
+        data: foundCat,
       });
     } catch (error) {
       return generateErrorResponse(error);

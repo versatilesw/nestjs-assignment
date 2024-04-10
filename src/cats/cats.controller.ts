@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { RolesGuard } from '../common/guards/roles.guard';
-// import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
+import { ParseIntPipe } from '../common/pipes/parse-int.pipe';
 import { CatsService } from './cats.service';
 import { Response } from 'express';
 import { CreateCatDto } from './dto/create-cat.dto';
@@ -32,11 +32,11 @@ export class CatsController {
     return res.status(status).send(responseData);
   }
 
-  // @Get(':id')
-  // findOne(
-  //   @Param('id', new ParseIntPipe())
-  //   id: number,
-  // ) {
-  //   // get by ID logic
-  // }
+
+  @Get(':id')
+  async findOne(@Res() res: Response, @Param('id', new ParseIntPipe()) id: number,) {
+    const { status, ...responseData } = await this.catsService.findOne(id);
+
+    return res.status(status).send(responseData);
+  }
 }
