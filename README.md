@@ -87,6 +87,12 @@ To run tests, use the following commands:
     $ npm run test:cov
     ```
 
+## Swagger url
+
+  ```bash
+    localhost:3000/api-docs
+    ```
+
 ## Technologies Used
 
 - [NestJS](https://docs.nestjs.com/first-steps) - A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
