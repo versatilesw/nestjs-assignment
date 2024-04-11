@@ -4,7 +4,7 @@ import { Cat } from './entities/cats.entities';
 import { Repository } from 'typeorm';
 import { generateErrorResponse, generateSuccessResponse, throwError } from '../common/utils/utils';
 import { CreateCatDto, UpdateCatDto } from './dto/create-cat.dto';
-import { FavouriteCat } from 'src/auth/entities/auth.entities';
+import { FavouriteCat } from "../auth/entities/auth.entities";
 
 @Injectable()
 export class CatsService {
@@ -66,7 +66,7 @@ export class CatsService {
     }
   }
 
-  async update(id: number,dto:UpdateCatDto): Promise<any> {
+  async update(id: number, dto: UpdateCatDto): Promise<any> {
     try {
 
       const foundCat = await this.catRepository.findOne({ where: { id } })
